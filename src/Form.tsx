@@ -27,12 +27,14 @@ export default class Form extends PureComponent<FormProps, State> {
   }
 
   handleChange(formState: FormState) {
-    this.setState({ formState })
+    this.setState({ formState });
   }
 
   render() {
     const { children } = this.props;
     const { formera, formState } = this.state;
+
+    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
 
     return (
       <form>

@@ -29,9 +29,9 @@ class Field extends PureComponent<FieldProps, State> {
 
   render() {
     const { input } = this.state;
-    const { name, children } = this.props;
+    const { name, children, formera } = this.props;
 
-    console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+    if(formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
     return children(input);
   }
