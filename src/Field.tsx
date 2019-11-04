@@ -23,6 +23,8 @@ class Field extends PureComponent<FieldProps, State> {
   }
 
   handleChange(input: Input) {
+    const { formera } = this.props;
+    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "CHANGE" FIELD: "${name}"`);
     delete input.subscribe;
     this.setState({ input });
   }
@@ -31,7 +33,7 @@ class Field extends PureComponent<FieldProps, State> {
     const { input } = this.state;
     const { name, children, formera } = this.props;
 
-    if(formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
     return children(input);
   }
