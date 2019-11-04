@@ -1,46 +1,43 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import withFormera from './withFormera';
 import { FieldArrayProps, FieldArrayRenderProps } from './types';
-import { Field } from 'formera-form/dist/types';
+import { Input } from 'formera-form/src/types';
 
 interface State {
-  field: Field,
-  fieldArrayHandler: FieldArrayRenderProps,
+  input: Input,
+  arrayHandler: FieldArrayRenderProps,
 }
 
 class FieldArray extends PureComponent<FieldArrayProps, State> {
   constructor(props: FieldArrayProps) {
     super(props);
 
-    this.state = { field: null, fieldArrayHandler: null }
+    const { name, formera } = props;
 
-    this.handleFieldChange = this.handleFieldChange.bind(this);
+    const input: Input = formera.registerField(name);
+
+    input.subscribe(this.handleChange.bind(this));
+
+    delete input.subscribe;
+
+    this.state = { input, arrayHandler: this.getArrayHandler(input) };
   }
 
-  componentDidMount() {
-    const { name, formera } = this.props;
-
-    const field = formera.registerField(name);
-
-    field.subscribe(this.handleFieldChange);
-
-    this.setState({ field, fieldArrayHandler: this.getHandler(field) });
-  }
-
-  getHandler(field: Field): FieldArrayRenderProps {
+  getArrayHandler(input: Input): FieldArrayRenderProps {
     const { name } = this.props;
     return {
+      length: input.value ? input.value.length : 0,
       push(value = {}) {
-        field.onChange([...field.value, value]);
+        input.onChange([...input.value, value]);
       },
       remove(index: number) {
-        const value = [...field.value];
+        const value = [...input.value];
         value.splice(index, 1);
-        field.onChange(value);
+        input.onChange(value);
       },
       map(callback) {
-        if (field.value) {
-          return field.value.map((item: any, index: number) => callback(`${name}[${index}]`, index));
+        if (input.value) {
+          return input.value.map((item: any, index: number) => callback(`${name}[${index}]`, index));
         } else {
           return (false)
         }
@@ -48,22 +45,17 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
     }
   }
 
-  handleFieldChange(field: Field) {
-    this.setState({ field, fieldArrayHandler: this.getHandler(field) });
+  handleChange(input: Input) {
+    this.setState({ input, arrayHandler: this.getArrayHandler(input) });
   }
 
   render() {
-    const { field, fieldArrayHandler } = this.state;
-    const { name, children } = this.props;
+    const { arrayHandler } = this.state;
+    const { name, children, formera } = this.props;
 
-    console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+   if(formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
-    return (
-      field ?
-        children(fieldArrayHandler)
-        :
-        (false)
-    )
+    return children(arrayHandler);
   }
 }
 

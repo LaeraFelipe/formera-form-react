@@ -1,47 +1,39 @@
 import React, { PureComponent } from 'react';
 import withFormera from './withFormera';
-import { Field as FormeraField } from 'formera-form/src/types';
+import { Input } from 'formera-form/src/types';
 import { FieldProps } from './types';
 
 interface State {
-  field: FormeraField,
+  input: Input,
 }
 
 class Field extends PureComponent<FieldProps, State> {
   constructor(props: FieldProps) {
     super(props);
 
-    this.handleFieldChange = this.handleFieldChange.bind(this);
+    const { name, formera, validators, validationType } = props;
 
-    this.state = { field: null };
+    const input: Input = formera.registerField(name, { validators, validationType });
+
+    input.subscribe(this.handleChange.bind(this));
+
+    delete input.subscribe;
+
+    this.state = { input };
   }
 
-  componentDidMount() {
-    const { formera, name } = this.props;
-    const field = formera.registerField(name, { validators: ['required'] });
-
-    field.subscribe(this.handleFieldChange);
-
-    delete field.subscribe;
-
-    this.setState({ field })
-  }
-
-  handleFieldChange(formeraField: FormeraField) {
-    delete formeraField.subscribe;
-    this.setState({ field: formeraField });
+  handleChange(input: Input) {
+    delete input.subscribe;
+    this.setState({ input });
   }
 
   render() {
-    const { field } = this.state;
+    const { input } = this.state;
     const { name, children } = this.props;
 
     console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
-    return field ?
-      children(field)
-      :
-      (false)
+    return children(input);
   }
 }
 

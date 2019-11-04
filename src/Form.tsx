@@ -14,9 +14,9 @@ export default class Form extends PureComponent<FormProps, State> {
   constructor(props: any) {
     super(props);
 
-    const { debug, initialValues, onSubmit } = props;
+    const { debug, initialValues, onSubmit, validationType } = props;
 
-    const formera = new Formera({ debug, initialValues, onSubmit });
+    const formera = new Formera({ debug, initialValues, onSubmit, validationType });
 
     formera.formSubscribe(this.handleChange.bind(this));
 
@@ -28,11 +28,6 @@ export default class Form extends PureComponent<FormProps, State> {
 
   handleChange(formState: FormState) {
     this.setState({ formState })
-  }
-
-  handleSubmit(values: any) {
-    const { formera } = this.state;
-    formera.submit();
   }
 
   render() {
