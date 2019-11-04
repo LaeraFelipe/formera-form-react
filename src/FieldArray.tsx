@@ -23,6 +23,11 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
     this.state = { input, arrayHandler: this.getArrayHandler(input) };
   }
 
+  componentWillUnmount() {
+    const { formera, name } = this.props;
+    formera.unregisterField(name);
+  }
+
   getArrayHandler(input: Input): FieldArrayRenderProps {
     const { name } = this.props;
     return {
@@ -53,7 +58,7 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
     const { arrayHandler } = this.state;
     const { name, children, formera } = this.props;
 
-   if(formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
     return children(arrayHandler);
   }

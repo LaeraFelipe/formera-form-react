@@ -22,6 +22,11 @@ class Field extends PureComponent<FieldProps, State> {
     this.state = { input };
   }
 
+  componentWillUnmount() {
+    const { formera, name } = this.props;
+    formera.unregisterField(name);
+  }
+
   handleChange(input: Input) {
     delete input.subscribe;
     this.setState({ input });
