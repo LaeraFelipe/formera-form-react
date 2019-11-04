@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import withFormera from './withFormera';
 import { FieldArrayProps, FieldArrayRenderProps } from './types';
-import { Field } from 'formera-forms/dist/types';
+import { Field } from 'formera-form/dist/types';
 
 interface State {
   field: Field,

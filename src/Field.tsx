@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import withFormera from './withFormera';
-import { Field as FormeraField } from 'formera-forms/src/types';
+import { Field as FormeraField } from 'formera-form/src/types';
 import { FieldProps } from './types';
 
 interface State {

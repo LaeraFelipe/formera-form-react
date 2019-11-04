@@ -1,7 +1,7 @@
-import { FieldSubscriptionOptions, Field, FormState } from "formera-forms/src/types";
-import { FieldValidator } from "formera-forms/dist/types";
+import { FieldSubscriptionOptions, Field, FormState } from "formera-form/src/types";
+import { FieldValidator } from "formera-form/dist/types";
 import { ReactElement } from "react";
-import Formera from "formera-forms";
+import Formera from "formera-form";
 
 export interface FormProps {
   initialValues: any,
