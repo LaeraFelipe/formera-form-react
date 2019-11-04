@@ -23,8 +23,6 @@ class Field extends PureComponent<FieldProps, State> {
   }
 
   handleChange(input: Input) {
-    const { formera } = this.props;
-    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "CHANGE" FIELD: "${name}"`);
     delete input.subscribe;
     this.setState({ input });
   }
