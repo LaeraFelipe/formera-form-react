@@ -28,6 +28,7 @@ export default class Form extends PureComponent<FormProps, State> {
 
   handleChange(formState: FormState) {
     this.setState({ formState });
+    this.forceUpdate();
   }
 
   render() {
