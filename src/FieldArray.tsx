@@ -16,9 +16,7 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
 
     const input: Input = formera.registerField(name);
 
-    input.subscribe(this.handleChange.bind(this));
-
-    delete input.subscribe;
+    formera.fieldSubscribe(name, this.handleChange.bind(this));
 
     this.state = { input, arrayHandler: this.getArrayHandler(input) };
   }
@@ -58,7 +56,7 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
     const { arrayHandler } = this.state;
     const { name, children, formera } = this.props;
 
-    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+    if (formera.options.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
     return children(arrayHandler);
   }

@@ -11,13 +11,11 @@ class Field extends PureComponent<FieldProps, State> {
   constructor(props: FieldProps) {
     super(props);
 
-    const { name, formera, validators, validationType } = props;
+    const { name, formera, validators, validationType, stopValidationOnFirstError } = props;
 
-    const input: Input = formera.registerField(name, { validators, validationType });
+    const input: Input = formera.registerField(name, { validators, validationType, stopValidationOnFirstError });
 
-    input.subscribe(this.handleChange.bind(this));
-
-    delete input.subscribe;
+    formera.fieldSubscribe(name, this.handleChange.bind(this))
 
     this.state = { input };
   }
@@ -28,7 +26,6 @@ class Field extends PureComponent<FieldProps, State> {
   }
 
   handleChange(input: Input) {
-    delete input.subscribe;
     this.setState({ input });
   }
 
@@ -36,7 +33,7 @@ class Field extends PureComponent<FieldProps, State> {
     const { input } = this.state;
     const { name, children, formera } = this.props;
 
-    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
+    if (formera.options.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
     return children(input);
   }

@@ -1,7 +1,7 @@
+import Formera from "formera-form";
 import { FieldSubscriptionOptions, Input, FormState } from "formera-form/src/types";
 import { FieldValidator, FormOptions } from "formera-form/dist/types";
 import { ReactElement } from "react";
-import Formera from "formera-form";
 
 export interface FormProps extends FormOptions {
   children: (formState: Partial<FormState>, form: Formera) => ReactElement
@@ -12,6 +12,7 @@ export interface FieldProps {
   validators?: Array<string | FieldValidator>,
   validationType?: 'onChange' | 'onBlur',
   subscriptions?: FieldSubscriptionOptions,
+  stopValidationOnFirstError?: boolean,
   formera?: Formera,
   children: (field: FieldRenderProps) => ReactElement,
 }
