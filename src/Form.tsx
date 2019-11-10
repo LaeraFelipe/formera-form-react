@@ -14,9 +14,15 @@ export default class Form extends PureComponent<FormProps, State> {
   constructor(props: FormProps) {
     super(props);
 
-    const { debug, initialValues, onSubmit, validationType, customValidators, customValidationMessages } = props;
+    const { debug, initialValues, onSubmit, validationType, customValidators, customValidationMessages, formeraInstance } = props;
 
-    const formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
+    let formera: Formera;
+
+    if (formeraInstance) {
+      formera = formeraInstance;
+    } else {
+      formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
+    }
 
     formera.formSubscribe(this.handleChange.bind(this));
 

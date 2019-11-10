@@ -4,6 +4,7 @@ import { FieldValidator, FormOptions } from "formera-form/dist/types";
 import { ReactElement } from "react";
 
 export interface FormProps extends FormOptions {
+  formeraInstance?: Formera,
   children: (formState: Partial<FormState>, form: Formera) => ReactElement
 }
 
