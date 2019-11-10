@@ -11,18 +11,18 @@ interface State {
 }
 
 export default class Form extends PureComponent<FormProps, State> {
-  constructor(props: any) {
+  constructor(props: FormProps) {
     super(props);
 
-    const { debug, initialValues, onSubmit, validationType } = props;
+    const { debug, initialValues, onSubmit, validationType, customValidators, customValidationMessages } = props;
 
-    const formera = new Formera({ debug, initialValues, onSubmit, validationType });
+    const formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
 
     formera.formSubscribe(this.handleChange.bind(this));
 
     this.state = {
       formera,
-      formState: formera.getState()
+      formState: formera.getState().formState
     };
   }
 
@@ -34,7 +34,7 @@ export default class Form extends PureComponent<FormProps, State> {
     const { children } = this.props;
     const { formera, formState } = this.state;
 
-    if (formera.options.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
+    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
 
     return (
       <form>
