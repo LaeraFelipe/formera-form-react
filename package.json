@@ -1,6 +1,6 @@
 {
   "name": "formera-form-react",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,5 +16,9 @@
   "devDependencies": {
     "@types/react": "^16.9.11",
     "typescript": "^3.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LaeraFelipe/formera-form-react"
   }
 }
