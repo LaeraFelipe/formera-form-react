@@ -1,9 +1,8 @@
 import React, { PureComponent, } from 'react';
-import Formizer from 'formera-form';
+import Formizer, { FormState } from 'formera-form';
 import Formera from 'formera-form';
 import { FormeraContext } from './FormeraContext';
 import { FormProps } from './types';
-import { FormState } from 'formera-form/dist/types';
 
 interface State {
   formera: Formizer,
@@ -28,7 +27,7 @@ export default class Form extends PureComponent<FormProps, State> {
 
     this.state = {
       formera,
-      formState: formera.getState().formState
+      formState: formera.getState()
     };
   }
 

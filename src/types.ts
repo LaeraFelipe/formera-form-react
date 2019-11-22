@@ -1,6 +1,4 @@
-import Formera from "formera-form";
-import { FieldSubscriptionOptions, Input, FormState } from "formera-form/src/types";
-import { FieldValidator, FormOptions } from "formera-form/dist/types";
+import Formera, { FormOptions, FieldValidator, FieldSubscriptionOptions, FieldHandler, FormState, FieldState } from "formera-form";
 import { ReactElement } from "react";
 
 export interface FormProps extends FormOptions {
@@ -18,7 +16,10 @@ export interface FieldProps {
   children: (field: FieldRenderProps) => ReactElement,
 }
 
-export interface FieldRenderProps extends Input { }
+export interface FieldRenderProps {
+  input: Input,
+  meta: Meta,
+}
 
 export interface FieldArrayProps {
   name: string,
@@ -26,13 +27,23 @@ export interface FieldArrayProps {
   formera?: Formera,
 }
 
+export type MapCallback = (arrayItemName: string, arrayItemIndex: number) => ReactElement
+
 export interface FieldArrayRenderProps {
   length: number,
-  map(callback: (arrayItemName: string, arrayItemIndex: number) => ReactElement): ReactElement,
+  map(callback: MapCallback): ReactElement,
   push(value: any): void,
   remove(index: number): void,
 }
 
 export interface IFormeraContext {
   formera: Formera
+}
+
+export interface Meta extends Omit<FieldState, 'value' | 'previousState' | 'disabled'> { }
+
+export interface Input extends Omit<FieldHandler, 'subscribe'> {
+  name: string,
+  disabled: boolean,
+  value: any
 }

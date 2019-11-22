@@ -1,64 +1,83 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactElement } from 'react';
 import withFormera from './withFormera';
-import { FieldArrayProps, FieldArrayRenderProps } from './types';
-import { Input } from 'formera-form/src/types';
+import { FieldArrayProps, FieldArrayRenderProps, Input, MapCallback } from './types';
+import { FieldHandler, FieldState } from 'formera-form';
 
 interface State {
-  input: Input,
-  arrayHandler: FieldArrayRenderProps,
+  fieldState: FieldState
 }
 
 class FieldArray extends PureComponent<FieldArrayProps, State> {
+  name: string = null;
+  fieldHandler: FieldHandler = null;
+  arrayHandler: FieldArrayRenderProps = null;
+
   constructor(props: FieldArrayProps) {
     super(props);
 
     const { name, formera } = props;
 
-    const input: Input = formera.registerField(name);
+    this.name = name;
+    this.fieldHandler = formera.registerField(name);
 
     formera.fieldSubscribe(name, this.handleChange.bind(this));
+    const fieldState = formera.getFieldState(this.name);
 
-    this.state = { input, arrayHandler: this.getArrayHandler(input) };
+    this.state = { fieldState };
+
+    this.map = this.map.bind(this);
+    this.push = this.push.bind(this);
+    this.remove = this.remove.bind(this);
   }
 
   componentWillUnmount() {
-    const { formera, name } = this.props;
-    formera.unregisterField(name);
+    const { formera } = this.props;
+    formera.unregisterField(this.name);
   }
 
-  getArrayHandler(input: Input): FieldArrayRenderProps {
-    const { name } = this.props;
+  /**Map the itens from array. */
+  map(callback: MapCallback): ReactElement {
+    const { fieldState: { value } } = this.state;
+    return value.map((item: any, index: number) => callback(`${name}[${index}]`, index));
+  }
+
+  /**Push a new item in array. */
+  push(newValue = {}) {
+    const { fieldState: { value } } = this.state;
+    this.fieldHandler.onChange([...value, newValue]);
+  }
+
+  /**Remove item from array. */
+  remove(index: number) {
+    const { fieldState: { value } } = this.state;
+    const newValue = [...value];
+    newValue.splice(index, 1);
+    this.fieldHandler.onChange(newValue);
+  }
+
+  /**Get render props. */
+  getRenderProps(): FieldArrayRenderProps {
+    const { fieldState: { value } } = this.state;
+
     return {
-      length: input.value ? input.value.length : 0,
-      push(value = {}) {
-        input.onChange([...input.value, value]);
-      },
-      remove(index: number) {
-        const value = [...input.value];
-        value.splice(index, 1);
-        input.onChange(value);
-      },
-      map(callback) {
-        if (input.value) {
-          return input.value.map((item: any, index: number) => callback(`${name}[${index}]`, index));
-        } else {
-          return (false)
-        }
-      }
+      length: value ? value.length : 0,
+      push: this.push,
+      remove: this.remove,
+      map: this.map
     }
   }
 
-  handleChange(input: Input) {
-    this.setState({ input, arrayHandler: this.getArrayHandler(input) });
+  handleChange(fieldState: FieldState) {
+    this.setState({ fieldState });
   }
 
   render() {
-    const { arrayHandler } = this.state;
-    const { name, children, formera } = this.props;
+    const { formera, children } = this.props;
+    const renderProps = this.getRenderProps();
 
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
-    return children(arrayHandler);
+    return children(renderProps);
   }
 }
 
