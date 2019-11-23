@@ -1,7 +1,7 @@
 import Formera, { FormOptions, FieldValidator, FieldSubscriptionOptions, FieldHandler, FormState, FieldState } from "formera-form";
 import { ReactElement } from "react";
 
-export interface FormProps extends FormOptions {
+export interface FormProps extends Partial<FormOptions> {
   formeraInstance?: Formera,
   children: (formState: Partial<FormState>, form: Formera) => ReactElement
 }
