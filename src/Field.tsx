@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import withFormera from './withFormera';
 import { FieldProps, Input, Meta, FieldRenderProps } from './types';
 import { FieldHandler, FieldState } from 'formera-form';
+import { getEventValue } from './utils';
 
 interface State {
   fieldState: FieldState,
@@ -51,7 +52,7 @@ class Field extends PureComponent<FieldProps, State> {
       disabled,
       onFocus,
       onBlur,
-      onChange,
+      onChange: (eventOrValue) => onChange(getEventValue(eventOrValue)),
     }
 
     return { input, meta }
