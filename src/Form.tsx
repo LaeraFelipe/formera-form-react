@@ -1,4 +1,4 @@
-import React, { PureComponent, } from 'react';
+import React, { PureComponent, SyntheticEvent, } from 'react';
 import Formizer, { FormState } from 'formera-form';
 import Formera from 'formera-form';
 import { FormeraContext } from './FormeraContext';
@@ -29,10 +29,18 @@ export default class Form extends PureComponent<FormProps, State> {
       formera,
       formState: formera.getState()
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(formState: FormState) {
     this.setState({ formState: { ...formState } });
+  }
+
+  handleSubmit(event: SyntheticEvent) {
+    const { formera } = this.state;
+    event.preventDefault();
+    formera.submit();
   }
 
   render() {
@@ -42,7 +50,7 @@ export default class Form extends PureComponent<FormProps, State> {
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
 
     return (
-      <form>
+      <form onSubmit={this.handleSubmit} >
         <FormeraContext.Provider value={{ formera }}>
           {children(formState, formera)}
         </FormeraContext.Provider>
