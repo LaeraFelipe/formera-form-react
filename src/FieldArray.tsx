@@ -38,7 +38,7 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
   /**Map the itens from array. */
   map(callback: MapCallback): ReactElement {
     const { fieldState: { value } } = this.state;
-    return value && value.map((item: any, index: number) => callback(`${name}[${index}]`, index));
+    return value && value.map((item: any, index: number) => callback(`${this.name}[${index}]`, index));
   }
 
   /**Push a new item in array. */
