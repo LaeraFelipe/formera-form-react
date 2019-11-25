@@ -42,7 +42,7 @@ export interface IFormeraContext {
 
 export interface Meta extends Omit<FieldState, 'value' | 'previousState' | 'disabled'> { }
 
-export interface Input extends Omit<FieldHandler, 'subscribe'> {
+export interface Input extends Omit<FieldHandler, 'subscribe' | 'setData' | 'disable'> {
   name: string,
   disabled: boolean,
   value: any
