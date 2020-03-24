@@ -10,6 +10,8 @@ interface State {
 }
 
 export default class Form extends PureComponent<FormProps, State> {
+  isMounted = true;
+
   constructor(props: FormProps) {
     super(props);
 
@@ -33,8 +35,14 @@ export default class Form extends PureComponent<FormProps, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillMount() {
+    this.isMounted = false;
+  }
+
   handleChange(formState: FormState) {
-    this.setState({ formState: { ...formState } });
+    if (this.isMounted) {
+      this.setState({ formState: { ...formState } });
+    }
   }
 
   handleSubmit(event: SyntheticEvent) {
@@ -44,13 +52,13 @@ export default class Form extends PureComponent<FormProps, State> {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, className } = this.props;
     const { formera, formState } = this.state;
 
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
 
     return (
-      <form onSubmit={this.handleSubmit} >
+      <form className={className} onSubmit={this.handleSubmit} >
         <FormeraContext.Provider value={{ formera }}>
           {children(formState, formera)}
         </FormeraContext.Provider>

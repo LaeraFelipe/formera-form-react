@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import withFormera from './withFormera';
-import { FieldProps, Input, Meta, FieldRenderProps } from './types';
+import { FieldProps, Input, FieldRenderProps } from './types';
 import { FieldHandler, FieldState } from 'formera-form';
 import { getEventValue } from './utils';
 

@@ -5,8 +5,10 @@ import { ReactElement } from "react";
 export interface FormProps extends Partial<FormOptions> {
   /**Formera instance. If not passed will create a new one using the other properties entered. */
   formeraInstance?: Formera,
+  /**Class to form tag. */
+  className?: string
   /**Child element. This should contain the field elements. */
-  children: (formState: Partial<FormState>, form: Formera) => ReactElement
+  children: (formState: Partial<FormState>, form: Formera) => ReactElement | ReactElement,
 }
 
 /**Field props. */
@@ -74,7 +76,7 @@ export interface IFormeraContext {
 export interface Meta extends Omit<FieldState, 'value' | 'previousState' | 'disabled'> { }
 
 /**Properties for field state manipulation. */
-export interface Input extends Omit<FieldHandler, 'subscribe' | 'setData' | 'disable'> {
+export interface Input extends Omit<FieldHandler, 'subscribe' | 'setData' | 'disable' | 'enable'> {
   /**Field name. */
   name: string,
   /**If field is disabled. */
