@@ -10,8 +10,7 @@ interface State {
 }
 
 export default class Form extends PureComponent<FormProps, State> {
-  isMounted = true;
-
+  mounted = true;
   constructor(props: FormProps) {
     super(props);
 
@@ -36,11 +35,11 @@ export default class Form extends PureComponent<FormProps, State> {
   }
 
   componentWillMount() {
-    this.isMounted = false;
+    this.mounted = false;
   }
 
   handleChange(formState: FormState) {
-    if (this.isMounted) {
+    if (this.mounted) {
       this.setState({ formState: { ...formState } });
     }
   }
