@@ -34,7 +34,7 @@ export default class Form extends PureComponent<FormProps, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     this.mounted = false;
   }
 
