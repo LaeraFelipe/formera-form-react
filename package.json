@@ -11,7 +11,7 @@
   "author": "Felipe Laera",
   "license": "ISC",
   "dependencies": {
-    "formera-form": "^1.0.32"
+    "formera-form": "^1.0.33"
   },
   "peerDependencies": {
     "react": "^16.0.0"

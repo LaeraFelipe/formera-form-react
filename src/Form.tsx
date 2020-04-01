@@ -1,16 +1,16 @@
 import React, { PureComponent, SyntheticEvent, } from 'react';
-import Formizer, { FormState } from 'formera-form';
-import Formera from 'formera-form';
+import Formera, { FormState } from 'formera-form';
 import { FormeraContext } from './FormeraContext';
 import { FormProps } from './types';
 
 interface State {
-  formera: Formizer,
+  formera: Formera,
   formState: FormState
 }
 
 export default class Form extends PureComponent<FormProps, State> {
   mounted = true;
+
   constructor(props: FormProps) {
     super(props);
 
@@ -38,6 +38,13 @@ export default class Form extends PureComponent<FormProps, State> {
     this.mounted = false;
   }
 
+  componentDidUpdate(prevProps: FormProps, prevState: State) {
+    if (prevProps.initialValues !== this.props.initialValues) {
+      const { formera } = this.state;
+      formera.reset(this.props.initialValues);
+    }
+  }
+
   handleChange(formState: FormState) {
     if (this.mounted) {
       this.setState({ formState: { ...formState } });
@@ -55,7 +62,7 @@ export default class Form extends PureComponent<FormProps, State> {
     const { formera, formState } = this.state;
 
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
-
+    
     return (
       <form className={className} onSubmit={this.handleSubmit} >
         <FormeraContext.Provider value={{ formera }}>
