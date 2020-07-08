@@ -58,17 +58,26 @@ export default class Form extends PureComponent<FormProps, State> {
   }
 
   render() {
-    const { children, className } = this.props;
+    const { children, component: Component } = this.props;
     const { formera, formState } = this.state;
 
-    if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`);
-    
+    if (formera.debug) {
+      console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`)
+    }
+
     return (
-      <form className={className} onSubmit={this.handleSubmit} >
-        <FormeraContext.Provider value={{ formera }}>
-          {children(formState, formera)}
-        </FormeraContext.Provider>
-      </form>
+      <FormeraContext.Provider value={{ formera }}>
+        {
+          Component ?
+            (
+              <Component formera={formera} formState={formState} handleSubmit={this.handleSubmit} />
+            )
+            :
+            (
+              children({ formState, formera, handleSubmit: this.handleSubmit })
+            )
+        }
+      </FormeraContext.Provider>
     )
   }
 }

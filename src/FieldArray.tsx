@@ -38,7 +38,7 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
   /**Map the itens from array. */
   map(callback: MapCallback): ReactElement {
     const { fieldState: { value } } = this.state;
-    return value && value.map((item: any, index: number) => callback(`${this.name}[${index}]`, index));
+    return value && value.map((item: any, index: number) => callback(`${this.name}[${index}]`, item, index));
   }
 
   /**Push a new item in array. */
@@ -58,8 +58,9 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
   /**Get render props. */
   getRenderProps(): FieldArrayRenderProps {
     const { fieldState: { value } } = this.state;
-    
+
     return {
+      value: value,
       length: value ? value.length : 0,
       push: this.push,
       remove: this.remove,
@@ -72,12 +73,12 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
   }
 
   render() {
-    const { formera, children } = this.props;
+    const { formera, children, component: Component } = this.props;
     const renderProps = this.getRenderProps();
 
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
-    return children(renderProps);
+    return Component ? <Component {...renderProps} /> : children(renderProps);
   }
 }
 

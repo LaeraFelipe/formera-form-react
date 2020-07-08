@@ -63,13 +63,13 @@ class Field extends PureComponent<FieldProps, State> {
   }
 
   render() {
-    const { name, children, formera } = this.props;
+    const { name, children, formera, component: Component } = this.props;
 
     const renderProps = this.getRenderProps();
 
     if (formera.debug) console.log(`[FORMERA-REACT] ACTION: "RENDER" FIELD: "${name}"`);
 
-    return children(renderProps);
+    return Component ? <Component {...renderProps} /> : children(renderProps);
   }
 }
 

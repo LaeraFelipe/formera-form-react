@@ -1,14 +1,14 @@
 import Formera, { FormOptions, FieldValidator, FieldSubscriptionOptions, FieldHandler, FormState, FieldState } from "formera-form";
-import { ReactElement } from "react";
+import { ReactElement, ComponentType } from "react";
 
 /**Form props. */
 export interface FormProps extends Partial<FormOptions> {
   /**Formera instance. If not passed will create a new one using the other properties entered. */
   formeraInstance?: Formera,
-  /**Class to form tag. */
-  className?: string
+  /**Component to render. */
+  component?: ComponentType<{ formState: Partial<FormState>, formera: Formera, handleSubmit: (event: any) => void }>,
   /**Child element. This should contain the field elements. */
-  children: (formState: Partial<FormState>, form: Formera) => ReactElement | ReactElement,
+  children?: (fieldArrayProps: { formState: Partial<FormState>, formera: Formera, handleSubmit: (event: any) => void }) => ReactElement,
 }
 
 /**Field props. */
@@ -25,8 +25,10 @@ export interface FieldProps {
   stopValidationOnFirstError?: boolean,
   /**Formera instance. It is not necessary to enter this property as it is already received via context. */
   formera?: Formera,
+  /**Component to render. */
+  component?: ComponentType<FieldRenderProps>,
   /**Field element. */
-  children: (field: FieldRenderProps) => ReactElement,
+  children?: (field: FieldRenderProps) => ReactElement,
 }
 
 /**Field render props. */
@@ -41,10 +43,12 @@ export interface FieldRenderProps {
 export interface FieldArrayProps {
   /**Field name. This name will be used as a key within the form's value object to identify the value of the field. */
   name: string,
-  /**Field element. */
-  children: (arrayHandler: FieldArrayRenderProps) => ReactElement,
   /**Formera instance. It is not necessary to enter this property as it is already received via context. */
   formera?: Formera,
+  /**Component to render. */
+  component?: ComponentType<FieldArrayRenderProps>,
+  /**Field element. */
+  children?: (arrayHandler: FieldArrayRenderProps) => ReactElement,
 }
 
 /**
@@ -52,12 +56,14 @@ export interface FieldArrayProps {
  * @param arrayItemName Field name of current array level.
  * @param arrayItemIndex Current index of array.
  */
-export type MapCallback = (arrayItemName: string, arrayItemIndex: number) => ReactElement
+export type MapCallback = (arrayItemName: string, value: any, arrayItemIndex: number) => ReactElement
 
 /**Field array render props. */
 export interface FieldArrayRenderProps {
   /**Size of array. */
   length: number,
+  /**Value of current array. */
+  value: Array<any>,
   /**Mapping function to generate array items.  */
   map(callback: MapCallback): ReactElement,
   /**Push function to add items in array. */
