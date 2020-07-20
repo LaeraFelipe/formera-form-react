@@ -57,9 +57,10 @@ class FieldArray extends PureComponent<FieldArrayProps, State> {
 
   /**Get render props. */
   getRenderProps(): FieldArrayRenderProps {
-    const { fieldState: { value } } = this.state;
+    const { fieldState: { value, previousState, ...meta } } = this.state;
 
     return {
+      meta,
       value: value,
       length: value ? value.length : 0,
       push: this.push,

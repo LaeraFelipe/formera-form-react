@@ -62,6 +62,8 @@ export type MapCallback = (arrayItemName: string, value: any, arrayItemIndex: nu
 export interface FieldArrayRenderProps {
   /**Size of array. */
   length: number,
+  /**Other informations about the field. */
+  meta: Meta,
   /**Value of current array. */
   value: Array<any>,
   /**Mapping function to generate array items.  */
