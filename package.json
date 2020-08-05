@@ -1,6 +1,6 @@
 {
   "name": "formera-form-react",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "author": "Felipe Laera",
   "license": "ISC",
   "dependencies": {
-    "formera-form": "^1.0.33"
+    "formera-form": "^1.0.50"
   },
   "peerDependencies": {
     "react": "^16.0.0"

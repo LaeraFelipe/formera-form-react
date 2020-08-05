@@ -10,6 +10,7 @@ interface State {
 
 class Field extends PureComponent<FieldProps, State> {
   name: string = null;
+  subscriptionKey: number = undefined;
   fieldHandler: FieldHandler = null;
 
   constructor(props: FieldProps) {
@@ -21,7 +22,7 @@ class Field extends PureComponent<FieldProps, State> {
 
     this.fieldHandler = formera.registerField(name, { validators, validationType, stopValidationOnFirstError });
 
-    formera.fieldSubscribe(name, this.handleChange.bind(this));
+    this.subscriptionKey = formera.fieldSubscribe(name, this.handleChange.bind(this));
 
     const fieldState = this.normalizeFieldState(formera.getFieldState(name));
 
@@ -29,8 +30,12 @@ class Field extends PureComponent<FieldProps, State> {
   }
 
   componentWillUnmount() {
-    const { formera, name } = this.props;
-    formera.unregisterField(name);
+    const { formera, name, unregisterFieldOnUnmount } = this.props;
+    if (unregisterFieldOnUnmount) {
+      formera.unregisterField(name);
+    } else {
+      formera.fieldUnsubscribe(name, this.subscriptionKey);
+    }
   }
 
   /**Normalize field state to use with inputs. */

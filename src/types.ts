@@ -5,10 +5,12 @@ import { ReactElement, ComponentType } from "react";
 export interface FormProps extends Partial<FormOptions> {
   /**Formera instance. If not passed will create a new one using the other properties entered. */
   formeraInstance?: Formera,
+  /**If should delete field state on unmount. */
+  unregisterFieldOnUnmount?: boolean,
   /**Component to render. */
   component?: ComponentType<{ formState: Partial<FormState>, formera: Formera, handleSubmit: (event: any) => void }>,
   /**Child element. This should contain the field elements. */
-  children?: (fieldArrayProps: { formState: Partial<FormState>, formera: Formera, handleSubmit: (event: any) => void }) => ReactElement,
+  children?: (fieldArrayProps: { formState: Partial<FormState>, formera: Formera, handleSubmit: (event: any) => void }) => ReactElement
 }
 
 /**Field props. */
@@ -25,6 +27,8 @@ export interface FieldProps {
   stopValidationOnFirstError?: boolean,
   /**Formera instance. It is not necessary to enter this property as it is already received via context. */
   formera?: Formera,
+  /**If should delete field state on unmount. */
+  unregisterFieldOnUnmount?: boolean,
   /**Component to render. */
   component?: ComponentType<FieldRenderProps>,
   /**Field element. */
@@ -77,7 +81,9 @@ export interface FieldArrayRenderProps {
 /**This context provides the instance of the formera.  */
 export interface IFormeraContext {
   /**Formera instance. */
-  formera: Formera
+  formera: Formera,
+  /**If should delete field state on unmount. */
+  unregisterFieldOnUnmount: boolean
 }
 
 /**Parts of field state to pass to field component or field array component. */

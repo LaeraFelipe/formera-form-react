@@ -4,31 +4,29 @@ import { FormeraContext } from './FormeraContext';
 import { FormProps } from './types';
 
 interface State {
-  formera: Formera,
   formState: FormState
 }
 
 export default class Form extends PureComponent<FormProps, State> {
   mounted = true;
+  formera: Formera = undefined;
+  unregisterFieldOnUnmount: boolean = false;
 
   constructor(props: FormProps) {
     super(props);
 
     const { debug, initialValues, onSubmit, validationType, customValidators, customValidationMessages, formeraInstance } = props;
 
-    let formera: Formera;
-
     if (formeraInstance) {
-      formera = formeraInstance;
+      this.formera = formeraInstance;
     } else {
-      formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
+      this.formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
     }
 
-    formera.formSubscribe(this.handleChange.bind(this));
+    this.formera.formSubscribe(this.handleChange.bind(this));
 
     this.state = {
-      formera,
-      formState: formera.getState()
+      formState: this.formera.getState()
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,8 +38,7 @@ export default class Form extends PureComponent<FormProps, State> {
 
   componentDidUpdate(prevProps: FormProps, prevState: State) {
     if (prevProps.initialValues !== this.props.initialValues) {
-      const { formera } = this.state;
-      formera.reset(this.props.initialValues);
+      this.formera.reset(this.props.initialValues);
     }
   }
 
@@ -52,29 +49,28 @@ export default class Form extends PureComponent<FormProps, State> {
   }
 
   handleSubmit(event: SyntheticEvent) {
-    const { formera } = this.state;
     event.preventDefault();
-    formera.submit();
+    this.formera.submit();
   }
 
   render() {
-    const { children, component: Component } = this.props;
-    const { formera, formState } = this.state;
+    const { children, unregisterFieldOnUnmount, component: Component } = this.props;
+    const { formState } = this.state;
 
-    if (formera.debug) {
+    if (this.formera.debug) {
       console.log(`[FORMERA-REACT] ACTION: "RENDER" FORM`)
     }
 
     return (
-      <FormeraContext.Provider value={{ formera }}>
+      <FormeraContext.Provider value={{ formera: this.formera, unregisterFieldOnUnmount: !!unregisterFieldOnUnmount }}>
         {
           Component ?
             (
-              <Component formera={formera} formState={formState} handleSubmit={this.handleSubmit} />
+              <Component formera={this.formera} formState={formState} handleSubmit={this.handleSubmit} />
             )
             :
             (
-              children({ formState, formera, handleSubmit: this.handleSubmit })
+              children({ formState, formera: this.formera, handleSubmit: this.handleSubmit })
             )
         }
       </FormeraContext.Provider>
