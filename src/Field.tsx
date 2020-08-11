@@ -31,10 +31,9 @@ class Field extends PureComponent<FieldProps, State> {
 
   componentWillUnmount() {
     const { formera, name, unregisterFieldOnUnmount } = this.props;
+    formera.fieldUnsubscribe(name, this.subscriptionKey);
     if (unregisterFieldOnUnmount) {
       formera.unregisterField(name);
-    } else {
-      formera.fieldUnsubscribe(name, this.subscriptionKey);
     }
   }
 
