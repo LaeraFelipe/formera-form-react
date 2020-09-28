@@ -15,12 +15,12 @@ export default class Form extends PureComponent<FormProps, State> {
   constructor(props: FormProps) {
     super(props);
 
-    const { debug, initialValues, onSubmit, validationType, customValidators, customValidationMessages, formeraInstance } = props;
+    const { debug, initialValues, disabled, onSubmit, validationType, customValidators, customValidationMessages, formeraInstance } = props;
 
     if (formeraInstance) {
       this.formera = formeraInstance;
     } else {
-      this.formera = new Formera({ debug, initialValues, onSubmit, validationType, customValidationMessages, customValidators });
+      this.formera = new Formera({ debug, initialValues, disabled, onSubmit, validationType, customValidationMessages, customValidators });
     }
 
     this.formera.formSubscribe(this.handleChange.bind(this));
@@ -39,6 +39,10 @@ export default class Form extends PureComponent<FormProps, State> {
   componentDidUpdate(prevProps: FormProps, prevState: State) {
     if (prevProps.initialValues !== this.props.initialValues) {
       this.formera.reset(this.props.initialValues);
+    }
+
+    if (prevProps.disabled !== this.props.disabled && this.props.disabled !== undefined) {
+      this.formera.enable(null, !this.props.disabled);
     }
   }
 
