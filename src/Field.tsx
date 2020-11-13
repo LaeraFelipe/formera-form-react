@@ -41,7 +41,7 @@ class Field extends PureComponent<FieldProps, State> {
   normalizeFieldState(fieldState: FieldState) {
     return {
       ...fieldState,
-      value: fieldState.value || ''
+      value: fieldState.value ?? ''
     }
   }
 
